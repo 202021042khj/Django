@@ -1,0 +1,38 @@
+{% extends 'blog/base.html' %}
+    {% block main_area %}
+                <div class="col-lg-8">
+                    <!-- Post content-->
+                    <article>
+                        <!-- Post header-->
+                        <header class="mb-4">
+                            <!-- Post title-->
+                            <h1 class="fw-bolder mb-1">{{ post.title }}</h1>
+                            <!-- Post meta content-->
+                            <div class="text-muted fst-italic mb-2">Posted on January 1, 2023 by Start Bootstrap</div>
+                            <!-- Post categories-->
+                            {% if post.category %}
+                                <div class="badge bg-secondary text-decoration-none link-light" href="#!">{{post.category}}</div>
+                            {% else %}
+                                <div class="badge bg-secondary text-decoration-none link-light" href="#!">미분류</div>
+                            {% endif %}
+                        </header>
+                        <!-- Preview image figure-->
+                        <figure class="mb-4"><img class="img-fluid rounded" src="https://picsum.photos/seed/picsum/200/300" alt="..." /></figure>
+                        <!-- Post content-->
+                        <section class="mb-5">
+                            <section class="mb-5">
+                                <p class="fs-5 mb-4"> - {{post.content | linebreaksbr }}</p>
+                            </section>
+                            {% p if post.file_upload %}
+                            <section class="mb-5">
+                                <p class="fs-5 mb-4">
+                                    <a href="{{ post.file_upload.url }}"class="btn btn-outline-dark" pole="button" download>
+                                    download: {{ post.get_file_name }}
+                                </a>
+                                </p>
+                            </section>
+                            {% endif %}
+                    </article>
+                </div> 
+{% endblock %}
+                    
