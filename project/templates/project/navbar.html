@@ -1,0 +1,22 @@
+<!-- Navbar -->
+<nav class="navbar">
+    <div class="container">
+      <a class="navbar-brand" href="/project/">상품 반응 분석</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+      
+          <form method="post" action="{% url 'process_csv' %}" class="ml-auto text-white">
+            {% csrf_token %}
+            최신 데이터 반영
+            <button type="submit" class="btn btn-link p-0">
+              <i class="fas fa-sync-alt"></i>
+            </button>
+          </form>
+
+          <!-- Font Awesome 추가 -->
+          <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+
+      </div>
+    </div>
+  </nav>
