@@ -7,7 +7,7 @@ import os
 
 class Product(models.Model):  
     name = models.CharField(max_length=30) 
-    image = models.ImageField(upload_to='blog/images/%Y/%m/%d/', blank=True)
+    image = models.URLField(null=True, blank=True)
     like = models.IntegerField()
     dislike = models.IntegerField()
     keyword = models.CharField(max_length=100, blank=True)

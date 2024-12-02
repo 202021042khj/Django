@@ -23,6 +23,7 @@ from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Embedding, LSTM, Dense, Dropout
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report
+from project.utils.image_get import get_image_url
 
 class ProductListView(ListView):
     model = Product
@@ -51,6 +52,7 @@ def product_search(request):
     query = request.GET.get('q', '')  # 검색어를 가져옴
     products = Product.objects.filter(name__icontains=query) if query else []
     return render(request, 'project/product_search.html', {'products': products, 'query': query})
+
 
 def youtube_comment_crawler(request):
     search_term = request.GET.get('q', '')  # URL의 검색어(q) 파라미터를 가져옴
@@ -178,20 +180,26 @@ def youtube_comment_crawler(request):
     total_comments = len(data)
     category_ratios = {category: (count / total_comments) * 100 for category, count in category_counts.items()}
 
+    image = get_image_url(search_term)
+
     # 수정된 부분: 결과를 products.csv에 저장
     products_csv_path = '/Users/khj/github/Django/project/data/products.csv'
     with open(products_csv_path, mode='a', newline='', encoding='utf-8') as products_csv:
         writer = csv.writer(products_csv)
         # 헤더 추가 (필요하면 조건문으로 처음 실행 시에만 추가하도록 수정 가능)
-        writer.writerow(['Search Term', 'Positive Ratio', 'Negative Ratio', 'Category', 'Ratio'])
+        writer.writerow(['Search Term', 'Positive Ratio', 'Negative Ratio', 'Category', 'Ratio', 'image'])
         # 데이터 저장
-        writer.writerow([search_term, f"{pos_ratio:.2f}%", f"{neg_ratio:.2f}%", '', ''])
+        writer.writerow([search_term, f"{pos_ratio:.2f}%", f"{neg_ratio:.2f}%", '', '', image])
         for category, ratio in category_ratios.items():
             writer.writerow([search_term, '', '', category, f"{ratio:.2f}%"])
 
     print("결과가 'products.csv' 파일에 저장되었습니다.")
 
+    
+
     return redirect('product_list')
+
+    
 
 
 

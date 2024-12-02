@@ -212,7 +212,7 @@ to {
                 {% for product in products %}
                 <div class="card product-card shadow-sm">
                   {% if product.image %}
-                    <img src="{{ product.image.url }}" class="card-img" alt="Product Image">
+                    <img src="{{product.image }}" class="card-img" alt="Product Image">
                   {% else %}
                     <img class="card-img-top" src="https://picsum.photos/seed/{{ product.name }}/1600/900" alt="random_image">
                   {% endif %}

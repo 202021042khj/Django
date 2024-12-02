@@ -21,7 +21,7 @@ body {
 
     .navbar, .footer {
       width: 100%; /* Ensure they take up the full width */
-      background-color: #202020;
+      background-color: rgba(20, 20, 20, 0);
       text-align: center;
     }
 
@@ -30,7 +30,7 @@ body {
     }
 
     .navbar-brand {
-      font-size: 1rem;
+      font-size: 1rem; 
       font-weight: bold;
       color: #b0b0b0;
     }
@@ -106,21 +106,22 @@ body {
       background-color: #202020;
     }
 
-    #typingEffect::after {
-  content: "|";
-  display: inline-block;
-  margin-left: 5px;
-  animation: blink 0.6s steps(2, start) infinite;
-}
 
-@keyframes blink {
-  0%, 100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0;
-  }
-}
+    #typingEffect::after {
+      content: "|";
+      display: inline-block;
+      margin-left: 5px;
+      animation: blink 0.6s steps(2, start) infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% {
+        opacity: 1;
+      }
+      50% {
+        opacity: 0;
+      }
+    }
 
   
 </style>
@@ -132,12 +133,14 @@ body {
 
   <!-- Centralized Search -->
   <div class="body-container">
+    
     <form class="input-background" method="get" action="{% url 'product_search' %}">
-      <h2 id="typingEffect" class="hello text-white"></h2></n>
+      <!-- 검색창 -->
+      <h2 id="typingEffect" class="hello text-white"></h2>
       <div class="input-group">
-        
         <input type="text" name="q" class="form-control text-white" placeholder="상품 이름을 입력해주세요..." value="{{ request.GET.q }}">
         <div class="input-group-append">
+          <!-- 버튼 -->
           <button class="btn btn-primary" type="submit">검색</button>
         </div>
       </div>
@@ -160,6 +163,7 @@ body {
   
       typeWriter();
     });
+   
   </script>
   
 
