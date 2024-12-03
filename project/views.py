@@ -61,8 +61,9 @@ def youtube_comment_crawler(request):
 
     # ChromeDriver 경로 설정
     chrome_options = Options()
+    chrome_options.add_argument("--headless")  # 헤드리스 모드 (창 없이 실행)
     service = Service
-    driver = webdriver.Chrome()
+    driver = webdriver.Chrome(options=chrome_options)
 
     # 검색어 입력
     search_url = f'https://www.youtube.com/results?search_query={search_term}'
@@ -184,16 +185,17 @@ def youtube_comment_crawler(request):
 
     # 수정된 부분: 결과를 products.csv에 저장
     products_csv_path = '/Users/khj/github/Django/project/data/products.csv'
-    with open(products_csv_path, mode='a', newline='', encoding='utf-8') as products_csv:
-        writer = csv.writer(products_csv)
-        # 헤더 추가 (필요하면 조건문으로 처음 실행 시에만 추가하도록 수정 가능)
-        writer.writerow(['Search Term', 'Positive Ratio', 'Negative Ratio', 'Category', 'Ratio', 'image'])
-        # 데이터 저장
-        writer.writerow([search_term, f"{pos_ratio:.2f}%", f"{neg_ratio:.2f}%", '', '', image])
-        for category, ratio in category_ratios.items():
-            writer.writerow([search_term, '', '', category, f"{ratio:.2f}%"])
 
-    print("결과가 'products.csv' 파일에 저장되었습니다.")
+    with open(products_csv_path, mode='w', newline='', encoding='utf-8') as products_csv:
+        writer = csv.writer(products_csv)
+        # 헤더 추가 (필요하면 처음 실행 시에만 추가하도록 조건문 추가 가능)
+        writer.writerow(['Search Term', 'Image', 'Durability', 'Finish', 'Design', 'Positive Ratio', 'Negative Ratio'])
+        # 데이터 준비
+        row_data = [search_term, image]  # Search Term와 Image 데이터 추가
+        row_data.extend([f"{ratio:.2f}" for ratio in category_ratios.values()])  # Category 비율 추가
+        # 데이터 저장
+        writer.writerow(row_data)
+        print("결과가 'products.csv' 파일에 저장되었습니다.")
 
     
 
@@ -226,9 +228,12 @@ def process_local_csv(request):
                     # CSV 파일의 열 순서가 모델 필드와 일치한다고 가정
                     Product.objects.create(
                         name=row[0],
-                        like=int(row[1]),
-                        dislike=int(row[2]),
-                        keyword=row[3],
+                        image=row[1],
+                        durability=float(row[2]),
+                        finish=float(row[3]),
+                        design=float(row[4]),
+                        like=float(row[5]),
+                        dislike=float(row[6]),
                     )
                 except Exception as e:
                     messages.error(request, f"Error in row: {row} - {str(e)}")

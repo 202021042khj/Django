@@ -131,6 +131,9 @@ opacity: 0;
 
 .card{
   background-color: #333333;
+  flex-direction: row;
+  width: 200%;
+  margin-left: -50%;
 }
 
 .card-title, .card-text{
@@ -142,9 +145,7 @@ display: grid;
 grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
 gap: 20px;
 }
-.product-card {
-transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
+
 .product-card:hover {
 transform: translateY(-10px);
 box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
@@ -155,7 +156,18 @@ box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
 opacity: 0;
 transform: translateY(20px);
 animation: fadeIn 0.5s ease-in-out forwards;
+transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
+
+.card-img {
+    flex-shrink: 0; /* 이미지 크기를 고정 */
+    width: 300px; /* 이미지 고정 너비 */
+    height: 300px; /* 이미지 고정 높이 */
+    object-fit: cover; /* 이미지 비율 유지 */
+    border-radius: 10px; /* 모서리 둥글게 */
+    margin-right: 15px; /* 이미지와 텍스트 간격 */
+}
+
 .product-card:nth-child(even) {
 animation-delay: 0.2s;
 }
@@ -193,7 +205,56 @@ to {
 }
 }
 
+/* 전체 막대 그래프 스타일 */
+.progress-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+    font-family: Arial, sans-serif;
+    background-color: #333333;
+    flex-direction: row;
+}
 
+.progress-bar span {
+   display: inline-block; /* 텍스트의 너비에 맞게 배경 크기 조정 */
+   text-align: left; /* 텍스트를 왼쪽 정렬 */
+   margin-right: 5px; /* 텍스트와 그래프 사이 간격 */
+   font-weight: bold;
+   background-color: #333333; /* 배경색 (예시) */
+   color: white; /* 텍스트 색상 */
+   padding: 5px; /* 텍스트 주변 여백 */
+   border-radius: 5px; /* 배경의 둥근 모서리 */
+}
+
+.bar {
+    position: relative;
+    background-color: #333333;
+    height: 20px;
+    width: 100%;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.bar::after {
+    content: '';
+    display: block;
+    background-color: #ffffff;
+    height: 100%;
+    width: calc(var(--value) * 1%);
+    border-radius: 5px;
+    transition: width 1.5s ease-in-out;
+    transform-origin: left;
+}
+
+/* 커스텀 속성에 따라 막대의 길이 설정 */
+.bar {
+    --value: 0; /* 기본값 */
+}
+
+.bar::after {
+    width: calc(var(--value) * 1%);
+}
     
   
 </style>
@@ -214,15 +275,32 @@ to {
                   {% if product.image %}
                     <img src="{{product.image }}" class="card-img" alt="Product Image">
                   {% else %}
-                    <img class="card-img-top" src="https://picsum.photos/seed/{{ product.name }}/1600/900" alt="random_image">
+                    <img class="card-img" src="https://picsum.photos/seed/{{ product.name }}/1600/900" alt="random_image">
                   {% endif %}
                   <div class="card-body">
                     <h5 class="card-title">{{ product.name }}</h5>
                     <p class="card-text">
-                      <span class="like">👍 Like: {{ product.like }}%</span> &nbsp;
-                      <span class="dislike">👎 Dislike: {{ product.dislike }}%</span>
-                    </p>
-                    <p class="card-text keyword">Keyword: {{ product.keyword }}</p>
+                      <div class="progress-bar">
+                          <span>내구성</span>
+                          <div class="bar" style="--value: {{ product.durability }}"></div>
+                      </div>
+                      <div class="progress-bar">
+                          <span>마감&nbsp;&nbsp;&nbsp;</span>
+                          <div class="bar" style="--value: {{ product.finish }}"></div>
+                      </div>
+                      <div class="progress-bar">
+                          <span>디자인</span>
+                          <div class="bar" style="--value: {{ product.design }}"></div>
+                      </div>
+                      <div class="progress-bar">
+                          <span>좋아요</span>
+                          <div class="bar" style="--value: {{ product.like }}"></div>
+                      </div>
+                      <div class="progress-bar">
+                          <span>싫어요</span>
+                          <div class="bar" style="--value: {{ product.dislike }}"></div>
+                      </div>
+                  </p>
                   </div>
                 </div>
                 {% endfor %}
@@ -282,6 +360,10 @@ to {
                     typeWriter();
                     });
 
+                document.querySelectorAll('.bar').forEach(bar => {
+                  const value = bar.style.getPropertyValue('--value');
+                  bar.style.setProperty('--value', value);
+              });
               </script>
       
       <script>

@@ -8,10 +8,11 @@ import os
 class Product(models.Model):  
     name = models.CharField(max_length=30) 
     image = models.URLField(null=True, blank=True)
-    like = models.IntegerField()
-    dislike = models.IntegerField()
-    keyword = models.CharField(max_length=100, blank=True)
-    created_at = models.DateTimeField(auto_now_add=True)      
+    durability = models.FloatField(null=True)
+    finish = models.FloatField(null=True)
+    design = models.FloatField(null=True)
+    like = models.FloatField(null=True)
+    dislike = models.FloatField(null=True)  
     updated_at = models.DateTimeField(auto_now=True)         
     author = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
 

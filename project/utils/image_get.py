@@ -10,8 +10,10 @@ def get_image_url(search_term):
     
     # WebDriver 설정
     chrome_options = Options()
+    chrome_options.add_argument("--headless")  # 헤드리스 모드 (창 없이 실행)
     service = Service
-    driver = webdriver.Chrome()
+    driver = webdriver.Chrome(options=chrome_options)
+
 
     image = None
 
@@ -22,9 +24,9 @@ def get_image_url(search_term):
         WebDriverWait(driver, 10).until(EC.presence_of_all_elements_located((By.CSS_SELECTOR, 'img')))
         
        
-        for _ in range(0):
+        for _ in range(3):  # 3번 스크롤 다운 (이미지를 더 많이 로드)
             driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-            time.sleep(2) 
+            time.sleep(2)
 
        
         image_elements = driver.find_elements(By.CSS_SELECTOR, 'img')
